@@ -1,6 +1,8 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.ShortMessage;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
@@ -66,6 +68,36 @@ class RawMidiListenerTest implements RawMidiListener{
         String errorMessage = outputStreamCaptor.toString().trim(); // Get the printed error message
 //        assertTrue(errorMessage.contains("The MidiBus Warning: Message not sent, invalid MIDI data"));
         Assertions.assertEquals(errorMessage,"The MidiBus Warning: Message not sent, invalid MIDI data" );
+    }
+
+    // Send invalid message
+    @Test
+    public void sendInvalidMessageWithStatus() throws InterruptedException, InvalidMidiDataException {
+        MidiBus mybus = new MidiBus(this);
+
+        ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+        System.setErr(new PrintStream(outputStreamCaptor));
+
+        mybus.sendMessage(ShortMessage.NOTE_ON);
+
+        System.setErr(System.err);
+        String errorMessage = outputStreamCaptor.toString().trim();
+        Assertions.assertEquals(errorMessage,"The MidiBus Warning: Message not sent, invalid MIDI data");
+
+    }
+
+    @Test
+    public void sendValidMessageWithStatus() throws InterruptedException, InvalidMidiDataException {
+        MidiBus mybus = new MidiBus(this);
+
+        ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+        System.setErr(new PrintStream(outputStreamCaptor));
+
+        mybus.sendMessage(ShortMessage.NOTE_ON , 4);
+
+        System.setErr(System.err);
+        String errorMessage = outputStreamCaptor.toString().trim();
+        Assertions.assertEquals(errorMessage,"The MidiBus Warning: Message not sent, invalid MIDI data");
 
     }
 

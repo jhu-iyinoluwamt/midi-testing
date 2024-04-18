@@ -54,7 +54,7 @@ public class SimpleMidiListenerTest implements SimpleMidiListener  {
         midibus.sendTimestamps(false);
 
         midibus.sendNoteOn(0, 50, 127);
-        Thread.sleep(5000);
+        Thread.sleep(500);
         midibus.sendNoteOff(0, 50, 127);
 
         String realPitch = pitchMap[50 % 12];
