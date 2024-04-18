@@ -104,7 +104,7 @@ public class PianoInputTest implements SimpleMidiListener{
     }
 
     public void midiTest() {
-        mybus = new MidiBus(this, "Studio 68c", "Studio 68c");
+        mybus = new MidiBus(this, "MIDI Port", "MIDI Port");
         // Replace "Name of your MIDI keyboard" with the actual name as it appears in your MIDI software or settings
     }
 }

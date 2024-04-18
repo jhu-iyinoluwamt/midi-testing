@@ -67,21 +67,21 @@ class MidiBusTest {
 
     @Test
     public void constructorTest(){
-        MidiBus myBus = new MidiBus(this, 0, "Studio 68c", "68cbus");
+        MidiBus myBus = new MidiBus(this, 0, "MIDI Port", "68cbus");
         Assertions.assertTrue(myBus.bus_name == "68cbus");
         Assertions.assertTrue(myBus.input_devices!= null);
     }
 
     @Test
     public void constructor1Test(){
-        MidiBus myBus = new MidiBus(this, "Studio 68c", 0, "68cbus");
+        MidiBus myBus = new MidiBus(this, "MIDI Port", 0, "68cbus");
         Assertions.assertTrue(myBus.bus_name == "68cbus");
         Assertions.assertTrue(myBus.input_devices!= null);
     }
 
     @Test
     public void addInputErrorTest(){
-        MidiBus myBus = new MidiBus(this, "Studio 68c", 0, "68cbus");
+        MidiBus myBus = new MidiBus(this, "MIDI Port", 0, "68cbus");
 
         ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
         System.setErr(new PrintStream(outputStreamCaptor));

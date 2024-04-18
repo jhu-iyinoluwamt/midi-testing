@@ -15,7 +15,7 @@ class RawMidiListenerTest implements RawMidiListener{
     // Test that turns on and off Ab
     @Test
     public void sendMidiMessageTest() throws InterruptedException{
-        mybus = new MidiBus(this, "Studio 68c", "Studio 68c") ;
+        mybus = new MidiBus(this, "MIDI Port", "MIDI Port") ;
         Integer[] rawMsgList = new Integer[3];
         byte[] rawBytes = new byte[3];
 
@@ -46,7 +46,7 @@ class RawMidiListenerTest implements RawMidiListener{
 
     @Test
     public void sendMidiMessageFailTest() throws InterruptedException{
-        mybus = new MidiBus(this, "Studio 68c", "Studio 68c") ;
+        mybus = new MidiBus(this, "MIDI Port", "MIDI Port") ;
         Integer[] rawMsgList = new Integer[3];
         byte[] rawBytes = new byte[3];
 

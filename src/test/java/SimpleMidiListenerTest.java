@@ -50,7 +50,7 @@ public class SimpleMidiListenerTest implements SimpleMidiListener  {
         // TRY USING THROUGH PORT TO SIMULATE IN AND OUT TO READ BACK
         // MAYBE THE TINY MIDI KEYBOARD WILL WORK
 
-        MidiBus midibus = new MidiBus(this,"Studio 68c", "Studio 68c");
+        MidiBus midibus = new MidiBus(this,"MIDI Port", "MIDI Port");
         midibus.sendTimestamps(false);
 
         midibus.sendNoteOn(0, 50, 127);
@@ -68,7 +68,7 @@ public class SimpleMidiListenerTest implements SimpleMidiListener  {
 
     @Test
     public void verifyNOteStateChangeTest() throws InterruptedException {
-        MidiBus midibus = new MidiBus(this,"Studio 68c", "Studio 68c");
+        MidiBus midibus = new MidiBus(this,"MIDI Port", "MIDI Port");
         midibus.sendTimestamps(false);
 
         for (int i = 0; i < 20; i++){
@@ -83,7 +83,7 @@ public class SimpleMidiListenerTest implements SimpleMidiListener  {
 
     @Test
     public void verifyVelocityChangeTest() throws InterruptedException {
-        MidiBus midibus = new MidiBus(this,"Studio 68c", "Studio 68c");
+        MidiBus midibus = new MidiBus(this,"MIDI Port", "MIDI Port");
         midibus.sendTimestamps(false);
 
         for (int i = 0; i <= 50; i++){
@@ -101,7 +101,7 @@ public class SimpleMidiListenerTest implements SimpleMidiListener  {
 
     @Test
     public void controllerChangeTest() throws InterruptedException {
-        MidiBus midibus = new MidiBus(this,"Studio 68c", "Studio 68c");
+        MidiBus midibus = new MidiBus(this,"MIDI Port", "MIDI Port");
         midibus.sendTimestamps(false);
 
         midibus.sendNoteOn(0, 70, 127);
