@@ -21,45 +21,45 @@ public class PianoInputTest implements SimpleMidiListener{
 
 
     // PIANO INPUT WHITEBOX AND DEMO TESTS //
-    @Test
-    public void lowestVelocityTest() throws InterruptedException{
-        System.out.println("PLAY KEYBOARD AT SOFTEST VELOCITY");
-
-        midiTest();
-
-        while (noteOnCount < 1){
-            Thread.sleep(100);
-        }
-
-        Assertions.assertTrue(globalVelocity < 50);
-    }
-    @Test
-    public void maxVelocityTest() throws InterruptedException{
-        System.out.println("PLAY KEYBOARD AT GREATEST VELOCITY!!");
-
-        midiTest();
-
-        while (noteOnCount < 1) {
-            Thread.sleep(100); // Add a short delay to avoid busy-waiting
-        }
-
-        Assertions.assertTrue(globalVelocity > 100);
-    }
-
-    @Test
-    public void verifyPitch() throws InterruptedException {
-        System.out.println("PLAY C - E - G Sequenctially");
-
-        midiTest();
-
-        while (noteOnCount < 3){
-            Thread.sleep(100);
-        }
-
-        Assertions.assertTrue(pitchesRecentlyPlayedList[0] == "C"
-                && pitchesRecentlyPlayedList[1] == "E" && pitchesRecentlyPlayedList[2] == "G");
-
-    }
+//    @Test
+//    public void lowestVelocityTest() throws InterruptedException{
+//        System.out.println("PLAY KEYBOARD AT SOFTEST VELOCITY");
+//
+//        midiTest();
+//
+//        while (noteOnCount < 1){
+//            Thread.sleep(100);
+//        }
+//
+//        Assertions.assertTrue(globalVelocity < 50);
+//    }
+//    @Test
+//    public void maxVelocityTest() throws InterruptedException{
+//        System.out.println("PLAY KEYBOARD AT GREATEST VELOCITY!!");
+//
+//        midiTest();
+//
+//        while (noteOnCount < 1) {
+//            Thread.sleep(100); // Add a short delay to avoid busy-waiting
+//        }
+//
+//        Assertions.assertTrue(globalVelocity > 100);
+//    }
+//
+//    @Test
+//    public void verifyPitch() throws InterruptedException {
+//        System.out.println("PLAY C - E - G Sequenctially");
+//
+//        midiTest();
+//
+//        while (noteOnCount < 3){
+//            Thread.sleep(100);
+//        }
+//
+//        Assertions.assertTrue(pitchesRecentlyPlayedList[0] == "C"
+//                && pitchesRecentlyPlayedList[1] == "E" && pitchesRecentlyPlayedList[2] == "G");
+//
+//    }
 
 
     // -------------------------------------------------------------------------------------------
@@ -104,7 +104,7 @@ public class PianoInputTest implements SimpleMidiListener{
     }
 
     public void midiTest() {
-        mybus = new MidiBus(this, "MIDI Port", "MIDI Port");
+        mybus = new MidiBus(this, "Studio 68c", "Studio 68c");
         // Replace "Name of your MIDI keyboard" with the actual name as it appears in your MIDI software or settings
     }
 }

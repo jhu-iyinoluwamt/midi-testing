@@ -29,7 +29,9 @@
  * @see MidiBus
 */
 public interface RawMidiListener extends MidiListener {
-	/**
+    void rawMidiMessage(int command, int channel, int data1, int data2);
+
+    /**
 	 * Objects notifying this RawMidiListener of a new MIDI message call this method and pass the raw message to it.
 	 * 
 	 * @param data the data bytes that make up the MIDI message

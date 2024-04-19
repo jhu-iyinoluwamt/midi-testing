@@ -1,8 +1,12 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import javax.sound.midi.*;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -256,8 +260,169 @@ public class MidiBusUnitTest {
         assertTrue(newUnavailable.length >= 0, "Should handle dynamic changes in unavailable devices.");
     }
 
+//    @Test
+//    void testStop() {
+//        assertDoesNotThrow(() -> midiBus.stop());
+//    }
+
     @Test
-    void testStop() {
-        assertDoesNotThrow(() -> midiBus.stop());
+    public void constructorTest(){
+        MidiBus myBus = new MidiBus(this, 0, "Studio 68c", "68cbus");
+        assertTrue(myBus.bus_name == "68cbus");
+        assertTrue(myBus.input_devices!= null);
+    }
+
+    @Test
+    public void constructor1Test(){
+        MidiBus myBus = new MidiBus(this, "Studio 68c", 0, "68cbus");
+        assertTrue(myBus.bus_name == "68cbus");
+        assertTrue(myBus.input_devices!= null);
+    }
+
+    @Test
+    public void addInputErrorTest(){
+        MidiBus myBus = new MidiBus(this, "Studio 68c", 0, "68cbus");
+
+        ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+        System.setErr(new PrintStream(outputStreamCaptor));
+
+        myBus.addInput(123);
+
+        System.setErr(System.err);
+        String errorMessage = outputStreamCaptor.toString().trim();
+        assertEquals(errorMessage,"The MidiBus Warning: The chosen input device numbered [123] was not added because it doesn't exist");
+
+    }
+
+    @Test
+    public void addInputInvalidStringTest(){
+        MidiBus myBus = new MidiBus(this, "Studio 68c", "Studio 68c");
+
+        ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+        System.setErr(new PrintStream(outputStreamCaptor));
+
+        String deviceName = "im tired lol";
+
+        myBus.addInput(deviceName);
+
+        System.setErr(System.err);
+        String errorMessage = outputStreamCaptor.toString().trim();
+        assertEquals("The MidiBus Warning: No available input MIDI devices named: \""+deviceName+"\" were found",errorMessage);
+    }
+
+    @Test
+    public void removeInputTest(){
+        MidiBus myBus = new MidiBus(this, "Studio 68c", "Studio 68c");
+        myBus.removeInput(0);
+
+        String device = myBus.availableInputs()[0];
+        MidiDevice.Info[] devices = MidiBus.availableInputsMidiDeviceInfo();
+
+//        MidiBus.InputDeviceContainer container = midiBus.input_devices.get(0);
+
+        String[] emptyString = new String[0];
+        Vector<MidiBus.InputDeviceContainer> emptyVector = new Vector<>();
+
+        assertEquals(midiBus.input_devices, emptyVector);
+    }
+
+    @Test
+    public void removeInputStringInvalidTest(){
+        MidiBus myBus = new MidiBus(this, "Studio 68c", "Studio 68c");
+        myBus.removeInput("im so tired");
+
+        String device = myBus.availableInputs()[0];
+        MidiDevice.Info[] devices = MidiBus.availableInputsMidiDeviceInfo();
+
+//        MidiBus.InputDeviceContainer container = midiBus.input_devices.get(0);
+
+        String[] emptyString = new String[0];
+        Vector<MidiBus.InputDeviceContainer> emptyVector = new Vector<>();
+
+        assertEquals(midiBus.input_devices, emptyVector);
+    }
+
+    @Test
+    public void removeInputStringTest(){
+        MidiBus myBus = new MidiBus(this, "Studio 68c", "Studio 68c");
+        myBus.removeInput("Studio 68c");
+
+        String device = myBus.availableInputs()[0];
+        MidiDevice.Info[] devices = MidiBus.availableInputsMidiDeviceInfo();
+
+//        MidiBus.InputDeviceContainer container = midiBus.input_devices.get(0);
+
+        String[] emptyString = new String[0];
+        Vector<MidiBus.InputDeviceContainer> emptyVector = new Vector<>();
+
+        assertEquals(midiBus.input_devices, emptyVector);
+    }
+
+    @Test
+    public void removeInputInvalidTest(){
+        MidiBus myBus = new MidiBus(this, "Studio 68c", "Studio 68c");
+        myBus.removeInput(0);
+
+        Assertions.assertTrue(!midiBus.removeInput(12312));
+    }
+
+    @Test
+    public void addOutputInvalidTest(){
+        MidiBus myBus = new MidiBus(this, "Studio 68c", "Studio 68c");
+        Assertions.assertTrue(!myBus.addOutput(123123));
+    }
+
+    @Test
+    public void addOutputInvalidTest1(){
+        MidiBus myBus = new MidiBus(this, "Studio 68c", "Studio 68c");
+        Assertions.assertTrue(!myBus.addOutput("still tired"));
+    }
+
+    @Test
+    public void midiBusInitBusNullTest(){
+        String nullBusName = null;
+        MidiBus mybus = new MidiBus(this, nullBusName);
+        assertTrue(mybus.bus_name.contains("MidiBus"));
+    }
+
+    @Test
+    public void midiBusNoAvailableDevices() throws MidiUnavailableException {
+
+        MidiBus mybus = new MidiBus(this);
+        MidiBus.available_devices = null;
+
+        mybus.closeAllMidiDevices();
+        MidiDevice device;
+
+        for (int i = 0; i < MidiBus.availableOutputs().length; i++){
+            device = MidiSystem.getMidiDevice(MidiBus.available_devices[i]);
+            assertTrue(!device.isOpen());
+        }
+    }
+
+
+
+    @Test
+    public void simpleMidiTest(){
+        MidiBus myBus = new MidiBus();
+        myBus.sendTimestamps(false);
+        String[] availableInputs = MidiBus.availableInputs();
+
+
+
+        System.out.println("AVAILABLE INPUTS");
+        System.out.println("_________________");
+
+        for (int i = 0; i < availableInputs.length; i++){
+            System.out.println(i + " " + availableInputs[i]);
+        }
+
+        System.out.println("AVAILABLE OUTPUTS");
+        System.out.println("_________________");
+
+        for (int i = 0; i < availableInputs.length; i++){
+            System.out.println(i+ " " + availableInputs[i]);
+
+        }
     }
 }

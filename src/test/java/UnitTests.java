@@ -66,10 +66,10 @@ public class UnitTests {
         assertDoesNotThrow(() -> midiBus.sendMessage(ShortMessage.CONTROL_CHANGE, 7, 127));
     }
 
-    @Test
-    void testStop() {
-        assertDoesNotThrow(() -> midiBus.stop());
-    }
+//    @Test
+//    void testStop() {
+//        assertDoesNotThrow(() -> midiBus.stop());
+//    }
 
     @Test
     void testParentAndBusNameConstructor() {

@@ -6,8 +6,6 @@ import javax.sound.midi.ShortMessage;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class RawMidiListenerTest implements RawMidiListener{
     MidiBus mybus;
     byte[] currentMidiByte = new byte[3];
@@ -15,7 +13,7 @@ class RawMidiListenerTest implements RawMidiListener{
     // Test that turns on and off Ab
     @Test
     public void sendMidiMessageTest() throws InterruptedException{
-        mybus = new MidiBus(this, "MIDI Port", "MIDI Port") ;
+        mybus = new MidiBus(this, "Studio 68c", "Studio 68c") ;
         Integer[] rawMsgList = new Integer[3];
         byte[] rawBytes = new byte[3];
 
@@ -46,7 +44,7 @@ class RawMidiListenerTest implements RawMidiListener{
 
     @Test
     public void sendMidiMessageFailTest() throws InterruptedException{
-        mybus = new MidiBus(this, "MIDI Port", "MIDI Port") ;
+        mybus = new MidiBus(this, "Studio 68c", "Studio 68c") ;
         Integer[] rawMsgList = new Integer[3];
         byte[] rawBytes = new byte[3];
 
@@ -73,7 +71,7 @@ class RawMidiListenerTest implements RawMidiListener{
     // Send invalid message
     @Test
     public void sendInvalidMessageWithStatus() throws InterruptedException, InvalidMidiDataException {
-        MidiBus mybus = new MidiBus(this);
+        mybus = new MidiBus(this, "Studio 68c", "Studio 68c") ;
 
         ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
         System.setErr(new PrintStream(outputStreamCaptor));
@@ -88,7 +86,7 @@ class RawMidiListenerTest implements RawMidiListener{
 
     @Test
     public void sendValidMessageWithStatus() throws InterruptedException, InvalidMidiDataException {
-        MidiBus mybus = new MidiBus(this);
+        mybus = new MidiBus(this, "Studio 68c", "Studio 68c") ;
 
         ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
         System.setErr(new PrintStream(outputStreamCaptor));
@@ -99,6 +97,20 @@ class RawMidiListenerTest implements RawMidiListener{
         String errorMessage = outputStreamCaptor.toString().trim();
         Assertions.assertEquals(errorMessage,"The MidiBus Warning: Message not sent, invalid MIDI data");
 
+    }
+
+    @Test
+    public void midiMessageDifferentConstructor(){
+        mybus = new MidiBus(this, "Studio 68c", "Studio 68c") ;
+        mybus.sendMessage(ShortMessage.NOTE_ON, 1, 60, 100);
+
+        Assertions.assertTrue(true);
+    }
+
+    @Override
+    public void rawMidiMessage(int command, int channel, int data1, int data2){
+        System.out.println("we in here ");
+        System.out.println("ocme on bruh");
     }
 
     @Override

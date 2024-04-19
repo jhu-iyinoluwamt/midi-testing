@@ -2,7 +2,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 
-public class SimpleMidiListenerTest implements SimpleMidiListener  {
+public class ASimpleMidiListenerTest implements SimpleMidiListener  {
 
     String globalpitch;
     int globalVelocity;
@@ -45,29 +45,29 @@ public class SimpleMidiListenerTest implements SimpleMidiListener  {
     // MIDI OUT TESTS //
 
     @Test
-    public void checkPitchMidiOutTest() throws InterruptedException {
+    public void verifyPitchMidiOutTest() throws InterruptedException {
 
         // TRY USING THROUGH PORT TO SIMULATE IN AND OUT TO READ BACK
         // MAYBE THE TINY MIDI KEYBOARD WILL WORK
 
-//        MidiBus midibus = new MidiBus(this,"Studio 68c", "Studio 68c");
-////        midibus.sendTimestamps(false);
-//
-//        midibus.sendNoteOn(0, 50, 127);
-//        Thread.sleep(500);
-//        midibus.sendNoteOff(0, 50, 127);
-//
-//        String realPitch = pitchMap[50 % 12];
-//
-//        while (noteOnCount == 0){
-//            Thread.sleep(100);
-//        }
-//
-//        Assertions.assertTrue(note.name() == realPitch);
+        MidiBus midibus = new MidiBus(this,"Studio 68c", "Studio 68c");
+//        midibus.sendTimestamps(false);
+
+        midibus.sendNoteOn(0, 50, 127);
+        Thread.sleep(500);
+        midibus.sendNoteOff(0, 50, 127);
+
+        String realPitch = pitchMap[50 % 12];
+
+        while (noteOnCount == 0){
+            Thread.sleep(100);
+        }
+
+        Assertions.assertTrue(note.name() == realPitch);
     }
 
     @Test
-    public void checkNOteStateChangeTest() throws InterruptedException {
+    public void verifyNOteStateChangeTest() throws InterruptedException {
         MidiBus midibus = new MidiBus(this,"Studio 68c", "Studio 68c");
         midibus.sendTimestamps(false);
 
@@ -82,7 +82,7 @@ public class SimpleMidiListenerTest implements SimpleMidiListener  {
     }
 
     @Test
-    public void checkyVelocityChangeTest() throws InterruptedException {
+    public void verifyVelocityChangeTest() throws InterruptedException {
         MidiBus midibus = new MidiBus(this,"Studio 68c", "Studio 68c");
         midibus.sendTimestamps(false);
 

@@ -430,6 +430,7 @@ public class MidiBus {
 	 * @see #attachedInputs()
 	*/
 	public synchronized boolean removeInput(String device_name) {
+		System.out.println("come on");
 		for (InputDeviceContainer container : input_devices) {
 			if (container.info.getName().equals(device_name)) {
 				input_devices.remove(container);
@@ -440,7 +441,9 @@ public class MidiBus {
 				return true;
 			}
 		}
+		System.out.println("im hereee");
 		return false;
+
 	}
 	
 	/**
@@ -1739,7 +1742,7 @@ public class MidiBus {
 		
 	}	
 	
-	private class InputDeviceContainer {
+	class InputDeviceContainer {
 				
 		MidiDevice.Info info;
 		
