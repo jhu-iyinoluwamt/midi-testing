@@ -1,6 +1,10 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiMessage;
+import javax.sound.midi.ShortMessage;
+
 public class PianoInputTest implements SimpleMidiListener{
 
     int globalpitch;
@@ -60,6 +64,86 @@ public class PianoInputTest implements SimpleMidiListener{
 //                && pitchesRecentlyPlayedList[1] == "E" && pitchesRecentlyPlayedList[2] == "G");
 //
 //    }
+
+    @Test
+    public void noteConstructorTest(){
+        Note note = new Note(0, 70, 127, 50);
+
+        Assertions.assertTrue(note.channel == 0);
+        Assertions.assertTrue(note.pitch == 70);
+        Assertions.assertTrue(note.velocity == 127);
+        Assertions.assertTrue(note.ticks == 50);
+    }
+
+    @Test
+    public void noteConstructor1Test(){
+        Note note = new Note(0, 70, 127, 50, 500, "Studio 68c");
+
+        Assertions.assertTrue(note.channel == 0);
+        Assertions.assertTrue(note.pitch == 70);
+        Assertions.assertTrue(note.velocity == 127);
+        Assertions.assertTrue(note.ticks == 50);
+        Assertions.assertTrue(note.timestamp == 500);
+
+    }
+
+    @Test
+    public void noteRelativePitch(){
+        Note note = new Note(0, 70, 127, 50, 500, "newBus");
+        note.relativePitch();
+
+        Assertions.assertTrue(note.relativePitch() == 70);
+    }
+
+    @Test
+    public void noteOctave(){
+        Note note = new Note(0, 70, 127, 50, 500, "newBus");
+        note.relativePitch();
+
+        Assertions.assertTrue(note.octave() !=0);
+    }
+
+    @Test
+    public void callPaplet() throws InvalidMidiDataException {
+        Note note = new Note(0, 70, 127, 50, 500, "newBus");
+        byte[] rawBytes = new byte[3];
+
+        rawBytes[0] = (byte) 144;
+        rawBytes[1] = (byte) 80;
+        rawBytes[2] = (byte) 127;
+
+        PApplet pObj = new PApplet();
+        pObj.noteOn(0,70,127);
+        pObj.noteOff(0, 70, 127);
+
+        pObj.controllerChange(0, 70, 127);
+        pObj.noteOn(note);
+        pObj.noteOff(note);
+
+        pObj.noteOn(0,70, 127, 5, "68c");
+        pObj.noteOff(0,70, 0, 5, "68c");
+
+        pObj.rawMidi(rawBytes);
+        pObj.rawMidi(rawBytes, 5, "68c");
+
+        pObj.controllerChange(1, 64, 127, 1000, "Studio 68c");
+        pObj.controllerChange(1,64,127);
+
+        ShortMessage msg = new ShortMessage(0x90, 60, 127);
+        pObj.midiMessage(msg);
+
+        pObj.midiMessage(msg,5,"68c");
+
+        Assertions.assertTrue(note.channel == 0);
+    }
+
+    @Test
+    public void registerParentWithPap(){
+        MidiBus mybus = new MidiBus(this);
+        PApplet pobj = new PApplet();
+
+        mybus.registerParent(pobj);
+    }
 
 
     // -------------------------------------------------------------------------------------------

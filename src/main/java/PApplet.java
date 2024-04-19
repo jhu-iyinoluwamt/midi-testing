@@ -43,7 +43,7 @@ public class PApplet {
 	 * @see #controllerChange(int channel, int pitch, int velocity, long timestamp, String bus_name)
 	*/
 	public void controllerChange(int channel, int number, int value) {
-		
+		System.out.println("here");
 	}
 	
 	/**
@@ -57,7 +57,7 @@ public class PApplet {
 	 * @see #controllerChange(int channel, int pitch, int velocity)
 	*/
 	public void controllerChange(int channel, int number, int value, long timestamp, String bus_name) {
-		
+		System.out.println("here");
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class PApplet {
 	 * @see themidibus.ObjectMidiListener#controllerChange(ControlChange)
 	*/
 	public void controllerChange(ControlChange change) {
-		
+		System.out.println("here");
 	}
 	
 	/**
@@ -78,7 +78,7 @@ public class PApplet {
 	 * @see #midiMessage(MidiMessage message, long timestamp, String bus_name)
 	*/
 	public void midiMessage(MidiMessage message) {
-		
+		System.out.println("here");
 	}
 	
 	/**
@@ -90,7 +90,7 @@ public class PApplet {
 	 * @see #midiMessage(MidiMessage message)
 	*/
 	public void midiMessage(MidiMessage message, long timestamp, String bus_name) {
-		
+		System.out.println("here");
 	}
 	
 	/**
@@ -102,7 +102,7 @@ public class PApplet {
 	 * @see #noteOff(int channel, int pitch, int velocity, long timestamp, String bus_name)
 	*/
 	public void noteOff(int channel, int pitch, int velocity) {
-		
+		System.out.println("here");
 	}
 	
 	/**
@@ -116,7 +116,7 @@ public class PApplet {
 	 * @see #noteOff(int channel, int pitch, int velocity)
 	*/
 	public void noteOff(int channel, int pitch, int velocity, long timestamp, String bus_name) {
-		
+		System.out.println("here");
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class PApplet {
 	 * @see themidibus.ObjectMidiListener#noteOn(Note)
 	*/
 	public void noteOff(Note note) {
-		
+		System.out.println("here");
 	}
 	
 	/**
@@ -139,7 +139,7 @@ public class PApplet {
 	 * @see #noteOn(int channel, int pitch, int velocity, long timestamp, String bus_name)
 	*/
 	public void noteOn(int channel, int pitch, int velocity) {
-		
+		System.out.println("here");
 	}
 	
 	/**
@@ -153,7 +153,7 @@ public class PApplet {
 	 * @see #noteOn(int channel, int pitch, int velocity)
 	*/
 	public void noteOn(int channel, int pitch, int velocity, long timestamp, String bus_name) {
-		
+		System.out.println("here");
 	}
 
 	/**
@@ -164,7 +164,7 @@ public class PApplet {
 	 * @see themidibus.ObjectMidiListener#noteOff(Note)
 	*/
 	public void noteOn(Note note) {
-		
+		System.out.println("here");
 	}
 	
 	/**
@@ -174,7 +174,7 @@ public class PApplet {
 	 * @see #rawMidi(byte[] data, long timestamp, String bus_name)
 	*/
 	public void rawMidi(byte[] data) {
-		
+		System.out.println("here");
 	}
 	
 	/**
@@ -186,6 +186,6 @@ public class PApplet {
 	 * @see #rawMidi(byte[] data)
 	*/
 	public void rawMidi(byte[] data, long timestamp, String bus_name) {
-		
+		System.out.println("here");
 	}
 }

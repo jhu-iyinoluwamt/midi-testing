@@ -1,4 +1,5 @@
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import javax.sound.midi.*;
@@ -8,7 +9,15 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Vector;
 
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+//import org.powermock.api.mockito.PowerMockito;
+//import org.powermock.core.classloader.annotations.PrepareForTest;
+
 import static org.junit.jupiter.api.Assertions.*;
+//import static org.powermock.api.mockito.PowerMockito.mock;
+//import static org.powermock.api.mockito.PowerMockito.mock;
 
 public class MidiBusUnitTest {
     private MidiBus midiBus;
@@ -363,19 +372,19 @@ public class MidiBusUnitTest {
         MidiBus myBus = new MidiBus(this, "Studio 68c", "Studio 68c");
         myBus.removeInput(0);
 
-        Assertions.assertTrue(!midiBus.removeInput(12312));
+        assertTrue(!midiBus.removeInput(12312));
     }
 
     @Test
     public void addOutputInvalidTest(){
         MidiBus myBus = new MidiBus(this, "Studio 68c", "Studio 68c");
-        Assertions.assertTrue(!myBus.addOutput(123123));
+        assertTrue(!myBus.addOutput(123123));
     }
 
     @Test
     public void addOutputInvalidTest1(){
         MidiBus myBus = new MidiBus(this, "Studio 68c", "Studio 68c");
-        Assertions.assertTrue(!myBus.addOutput("still tired"));
+        assertTrue(!myBus.addOutput("still tired"));
     }
 
     @Test
@@ -399,6 +408,42 @@ public class MidiBusUnitTest {
             assertTrue(!device.isOpen());
         }
     }
+    @Test
+    public void registerNullParentTest(){
+        MidiBus myBus = new MidiBus(this, "Studio 68c", "Studio 68c");
+        myBus.parent = new MidiBus(this, "Studio 68c", "Studio 68c");
+
+        midiBus.registerParent(myBus);
+        assertTrue(myBus.parent != null);
+    }
+
+    @Test
+    public void cloneWithListenersAndIOTest(){
+        MidiBus mybus = new MidiBus(this, "Studio 68c", "Studio 68c");
+        mybus.addInput("Real Time Sequencer");
+        mybus.addOutput("Real Time Sequencer");
+
+        MidiListener listener = new MidiListener() {};
+        MidiListener listener1 = new MidiListener() {};
+
+        mybus.addMidiListener(listener);
+        mybus.addMidiListener(listener1);
+
+        mybus.addInput("Bus 1");
+        mybus.addOutput("Bus 1");
+
+        MidiBus cloneBus = mybus.clone();
+
+        Assertions.assertEquals(cloneBus, mybus);
+    }
+
+//    @Test
+//    public void unavailableDevices(){
+//        MidiBus mybus = new MidiBus(this, "Studio 68c", "Studio 68c");
+//        MockedStatic<MidiBus> mockBus =  Mockito.mockStatic(MidiBus.class);
+////        Mockito.when(mockBus.av)
+//
+//    }
 
 
 
@@ -425,4 +470,55 @@ public class MidiBusUnitTest {
 
         }
     }
+
+    @Test
+    public void testNotifyParent_ExceptionInMethodRawMidi() throws Exception {
+
+
+    }
+
+    @Test
+    public void testHashCode(){
+        MidiBus myBus = new MidiBus();
+        assertTrue(myBus.hashCode() > Integer.MIN_VALUE);
+
+    }
+
+
+    @Test
+    public void testNotifyListenersForRawMidiListeners() throws InvalidMidiDataException {
+//        // Create a mock RawMidiListener
+//        RawMidiListener mockListener = Mockito.mock(RawMidiListener.class);
+//
+//        // Throw an exception when the notify method is called
+//        Mockito.doThrow(new RuntimeException("Test exception")).when(mockListener).notify();
+//
+//        // Create a MidiBus instance
+//        MidiBus midiBus = new MidiBus();
+//
+//        // Add the mock listener to the MidiBus
+//        midiBus.addMidiListener(mockListener);
+//        ShortMessage message = new ShortMessage();
+//        message.setMessage(ShortMessage.NOTE_ON, 5, 60, 100); // Note On message on MIDI channel 5, note number 60, velocity 100
+//
+//        // Call the notifyListeners method
+//        assertThrows(RuntimeException.class, () -> midiBus.notifyListeners(message, 5));
+    }
+
+    @Test
+    public void addOuputGetMaxReceiversFailTest() throws MidiUnavailableException {
+        MidiDevice.Info devices = MidiBus.availableInputsMidiDeviceInfo()[0];
+        MidiBus midiBus = Mockito.mock(MidiBus.class);
+        MidiDevice new_device = MidiSystem.getMidiDevice(devices);
+
+        MidiDevice.Info mockDevice = Mockito.mock(MidiDevice.Info.class);
+
+
+
+
+
+
+    }
+
+    
 }

@@ -134,6 +134,8 @@ public class SimpleMidiListenerTest implements SimpleMidiListener  {
 
         // prints out note
         System.out.println(note.toString());
+        System.out.println(note.relativePitch());
+        System.out.println(note.octave());
 
         noteOnCount++;
         noteStateChangeCount++;
@@ -151,6 +153,8 @@ public class SimpleMidiListenerTest implements SimpleMidiListener  {
         noteOffCount++;
         noteStateChangeCount++;
     }
+
+
 
     @Override
     public void controllerChange(int channel, int number, int value) {
