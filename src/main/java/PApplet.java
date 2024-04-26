@@ -33,6 +33,21 @@ import javax.sound.midi.MidiMessage;
  * @see SimpleMidiListener
 */
 public class PApplet {
+
+	public int globalChannel;
+	public int globalPitch;
+	public int globalVelocity;
+	public long globalTimestamps;
+
+	public int globalNumber;
+
+	public int globalValue;
+
+	public String globalBusName;
+
+	public int globalStatus;
+	public int globalData1;
+	public int globalData2;
 	
 	/**
 	 * Is passed the channel, controller number and contoller value associated with every new ContollerChange MIDI message recieved by a MidiBus attached to this applet.
@@ -43,7 +58,9 @@ public class PApplet {
 	 * @see #controllerChange(int channel, int pitch, int velocity, long timestamp, String bus_name)
 	*/
 	public void controllerChange(int channel, int number, int value) {
-		System.out.println("here");
+		globalChannel = channel;
+		globalNumber = number;
+		globalValue = value;
 	}
 	
 	/**
@@ -58,6 +75,10 @@ public class PApplet {
 	*/
 	public void controllerChange(int channel, int number, int value, long timestamp, String bus_name) {
 		System.out.println("here");
+		globalChannel = channel;
+		globalValue = value;
+		globalTimestamps = timestamp;
+		globalBusName = bus_name;
 	}
 
 	/**
@@ -68,7 +89,10 @@ public class PApplet {
 	 * @see themidibus.ObjectMidiListener#controllerChange(ControlChange)
 	*/
 	public void controllerChange(ControlChange change) {
-		System.out.println("here");
+		globalChannel = change.channel;
+		globalValue = change.value;
+		globalNumber = change.number;
+		globalBusName = change.bus_name;
 	}
 	
 	/**
@@ -78,7 +102,14 @@ public class PApplet {
 	 * @see #midiMessage(MidiMessage message, long timestamp, String bus_name)
 	*/
 	public void midiMessage(MidiMessage message) {
-		System.out.println("here");
+		globalStatus = message.getStatus();
+		byte[] msg = new byte[3];
+		msg = message.getMessage();
+
+		globalStatus = msg[0];
+		globalData1 = msg[1];
+		globalData2 = msg[2];
+
 	}
 	
 	/**
@@ -90,7 +121,16 @@ public class PApplet {
 	 * @see #midiMessage(MidiMessage message)
 	*/
 	public void midiMessage(MidiMessage message, long timestamp, String bus_name) {
-		System.out.println("here");
+		globalStatus = message.getStatus();
+		byte[] msg = new byte[3];
+		msg = message.getMessage();
+
+		globalStatus = msg[0];
+		globalData1 = msg[1];
+		globalData2 = msg[2];
+
+		globalTimestamps = timestamp;
+		globalBusName = bus_name;
 	}
 	
 	/**
@@ -102,7 +142,9 @@ public class PApplet {
 	 * @see #noteOff(int channel, int pitch, int velocity, long timestamp, String bus_name)
 	*/
 	public void noteOff(int channel, int pitch, int velocity) {
-		System.out.println("here");
+		globalChannel = channel;
+		globalPitch = pitch;
+		globalVelocity = velocity;
 	}
 	
 	/**
@@ -116,7 +158,11 @@ public class PApplet {
 	 * @see #noteOff(int channel, int pitch, int velocity)
 	*/
 	public void noteOff(int channel, int pitch, int velocity, long timestamp, String bus_name) {
-		System.out.println("here");
+		globalChannel = channel;
+		globalPitch = pitch;
+		globalVelocity = velocity;
+		globalTimestamps = timestamp;
+		globalBusName = bus_name;
 	}
 
 	/**
@@ -127,6 +173,12 @@ public class PApplet {
 	 * @see themidibus.ObjectMidiListener#noteOn(Note)
 	*/
 	public void noteOff(Note note) {
+		globalBusName = note.bus_name;
+		globalVelocity = note.velocity;
+		globalPitch = note.pitch;
+		globalChannel = note.channel;
+		globalTimestamps = note.timestamp;
+
 		System.out.println("here");
 	}
 	
@@ -139,7 +191,9 @@ public class PApplet {
 	 * @see #noteOn(int channel, int pitch, int velocity, long timestamp, String bus_name)
 	*/
 	public void noteOn(int channel, int pitch, int velocity) {
-		System.out.println("here");
+		globalVelocity = velocity;
+		globalPitch = pitch;
+		globalChannel = channel;
 	}
 	
 	/**
@@ -153,7 +207,11 @@ public class PApplet {
 	 * @see #noteOn(int channel, int pitch, int velocity)
 	*/
 	public void noteOn(int channel, int pitch, int velocity, long timestamp, String bus_name) {
-		System.out.println("here");
+		globalVelocity = velocity;
+		globalPitch = pitch;
+		globalChannel = channel;
+		globalTimestamps = timestamp;
+		globalBusName = bus_name;
 	}
 
 	/**
@@ -164,7 +222,11 @@ public class PApplet {
 	 * @see themidibus.ObjectMidiListener#noteOff(Note)
 	*/
 	public void noteOn(Note note) {
-		System.out.println("here");
+		globalBusName = note.bus_name;
+		globalVelocity = note.velocity;
+		globalPitch = note.pitch;
+		globalChannel = note.channel;
+		globalTimestamps = note.timestamp;
 	}
 	
 	/**
@@ -174,7 +236,10 @@ public class PApplet {
 	 * @see #rawMidi(byte[] data, long timestamp, String bus_name)
 	*/
 	public void rawMidi(byte[] data) {
-		System.out.println("here");
+
+		globalStatus = data[0];
+		globalData1 = data[1];
+		globalData2 = data[2];
 	}
 	
 	/**
@@ -186,6 +251,10 @@ public class PApplet {
 	 * @see #rawMidi(byte[] data)
 	*/
 	public void rawMidi(byte[] data, long timestamp, String bus_name) {
-		System.out.println("here");
+		globalStatus = data[0];
+		globalData1 = data[1];
+		globalData2 = data[2];
+		globalTimestamps = timestamp;
+		globalBusName = bus_name;
 	}
 }

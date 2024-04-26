@@ -32,6 +32,8 @@
 */
 
 public interface ObjectMidiListener extends MidiListener {
+
+
 	
 	/**
 	 * Objects notifying this ObjectMidiListener of a new NoteOn events call this method.

@@ -512,13 +512,9 @@ public class MidiBusUnitTest {
         MidiDevice new_device = MidiSystem.getMidiDevice(devices);
 
         MidiDevice.Info mockDevice = Mockito.mock(MidiDevice.Info.class);
-
-
-
-
-
-
     }
+
+
 
     
 }

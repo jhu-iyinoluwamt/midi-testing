@@ -25,6 +25,20 @@ public class PianoInputTest implements SimpleMidiListener{
 
 
     // PIANO INPUT WHITEBOX AND DEMO TESTS //
+
+//    public static void main(String[] args) {
+//        MidiBus mybus1 = new MidiBus();
+//        MidiBus mybus = new MidiBus(mybus1, "Studio 68c", "Studio 68c");
+//    }
+
+
+//    @Test
+//    public void inputTest() throws InterruptedException {
+//        MidiBus mybus = new MidiBus(this, "Studio 68c", "Studio 68c");
+//        while (noteOnCount < 100){
+//            Thread.sleep(100);
+//        }
+//    }
 //    @Test
 //    public void lowestVelocityTest() throws InterruptedException{
 //        System.out.println("PLAY KEYBOARD AT SOFTEST VELOCITY");
@@ -104,37 +118,74 @@ public class PianoInputTest implements SimpleMidiListener{
     }
 
     @Test
-    public void callPaplet() throws InvalidMidiDataException {
-        Note note = new Note(0, 70, 127, 50, 500, "newBus");
+    public void callPapletVerification() throws InvalidMidiDataException {
+
         byte[] rawBytes = new byte[3];
 
         rawBytes[0] = (byte) 144;
         rawBytes[1] = (byte) 80;
         rawBytes[2] = (byte) 127;
 
+
+
         PApplet pObj = new PApplet();
         pObj.noteOn(0,70,127);
         pObj.noteOff(0, 70, 127);
 
+        Assertions.assertTrue(pObj.globalChannel == 0);
+        Assertions.assertTrue(pObj.globalPitch == 70);
+        Assertions.assertTrue(pObj.globalVelocity == 127);
+
+
+
         pObj.controllerChange(0, 70, 127);
+        Assertions.assertTrue(pObj.globalChannel == 0);
+        Assertions.assertTrue(pObj.globalNumber == 70);
+        Assertions.assertTrue(pObj.globalValue == 127);
+
+        Note note = new Note(0, 70, 127, 50, 500, "newBus");
         pObj.noteOn(note);
         pObj.noteOff(note);
 
+        Assertions.assertTrue(pObj.globalChannel == 0);
+        Assertions.assertTrue(pObj.globalPitch == 70);
+        Assertions.assertTrue(pObj.globalVelocity == 127);
+        Assertions.assertTrue(pObj.globalTimestamps == 500);
+        Assertions.assertTrue(pObj.globalBusName == "newBus");
+
         pObj.noteOn(0,70, 127, 5, "68c");
         pObj.noteOff(0,70, 0, 5, "68c");
+        Assertions.assertTrue(pObj.globalChannel == 0);
+        Assertions.assertTrue(pObj.globalPitch == 70);
+        Assertions.assertTrue(pObj.globalVelocity == 0);
+        Assertions.assertTrue(pObj.globalTimestamps == 5);
+        Assertions.assertTrue(pObj.globalBusName == "68c");
 
         pObj.rawMidi(rawBytes);
+        Assertions.assertTrue(rawBytes[0] == pObj.globalStatus);
+        Assertions.assertTrue(rawBytes[1] == pObj.globalData1);
+        Assertions.assertTrue(rawBytes[2] == pObj.globalData2);
+
         pObj.rawMidi(rawBytes, 5, "68c");
+        Assertions.assertTrue(pObj.globalTimestamps == 5);
+        Assertions.assertTrue(pObj.globalBusName == "68c");
 
         pObj.controllerChange(1, 64, 127, 1000, "Studio 68c");
         pObj.controllerChange(1,64,127);
+        Assertions.assertTrue(pObj.globalChannel == 1);
+        Assertions.assertTrue(pObj.globalNumber == 64);
+        Assertions.assertTrue(pObj.globalValue == 127);
 
         ShortMessage msg = new ShortMessage(0x90, 60, 127);
         pObj.midiMessage(msg);
+        Assertions.assertEquals((byte) 0x90, pObj.globalStatus);
+        Assertions.assertTrue((byte) 60 == pObj.globalData1);
+        Assertions.assertTrue((byte) 127 == pObj.globalData2);
 
         pObj.midiMessage(msg,5,"68c");
+        Assertions.assertTrue(pObj.globalTimestamps == 5);
+        Assertions.assertTrue(pObj.globalBusName == "68c");
 
-        Assertions.assertTrue(note.channel == 0);
     }
 
     @Test
@@ -143,6 +194,8 @@ public class PianoInputTest implements SimpleMidiListener{
         PApplet pobj = new PApplet();
 
         mybus.registerParent(pobj);
+
+        Assertions.assertTrue(mybus.parent == pobj);
     }
 
 

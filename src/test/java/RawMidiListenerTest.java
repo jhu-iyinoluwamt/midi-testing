@@ -8,6 +8,8 @@ import java.io.PrintStream;
 
 class RawMidiListenerTest implements RawMidiListener{
     MidiBus mybus;
+
+
     byte[] currentMidiByte = new byte[3];
 
     // Test that turns on and off Ab
@@ -109,6 +111,7 @@ class RawMidiListenerTest implements RawMidiListener{
 
     @Override
     public void rawMidiMessage(int command, int channel, int data1, int data2){
+
         System.out.println("we in here ");
         System.out.println("ocme on bruh");
     }
@@ -122,5 +125,7 @@ class RawMidiListenerTest implements RawMidiListener{
             System.out.println(data[i]);
         }
     }
+
+
 
 }
