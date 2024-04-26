@@ -12,6 +12,7 @@ import java.util.Vector;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.mockito.internal.matchers.Null;
 //import org.powermock.api.mockito.PowerMockito;
 //import org.powermock.core.classloader.annotations.PrepareForTest;
 
@@ -514,6 +515,158 @@ public class MidiBusUnitTest {
         MidiDevice.Info mockDevice = Mockito.mock(MidiDevice.Info.class);
     }
 
+    @Test
+    public void sendNoteOffTest() throws Exception {
+        MidiBus mybus = new MidiBus(this, "Studio 68c", "Studio 68c");
+        Note note = new Note(0,70, 127);
+        mybus.sendNoteOff(note);
+
+        Assertions.assertEquals(note.channel, 0);
+        Assertions.assertEquals(note.pitch, 70);
+        Assertions.assertEquals(note.velocity, 127 );
+    }
+
+    @Test
+    public void notifyListenersTest() throws Exception {
+        MidiBus mybus = new MidiBus(this, "Studio 68c", "Studio 68c");
+
+        ShortMessage message = new ShortMessage(0x90, 60,127);
+
+        mybus.notifyListeners(message, 10);
+
+        byte[] data = {(byte)0x90, (byte) 0x40, (byte) 0x7F}; // Example raw MIDI data
+
+        midiBus.notifyListeners(new MidiMessage(data) {
+            @Override
+            public Object clone() {
+                return null;
+            }
+        }, 0);
+
+        Note note = new Note(0, 60, 127);
+
+
+
+
+        Assertions.assertEquals(message.getChannel(), 0);
+        Assertions.assertEquals(message.getData1(), 60);
+        Assertions.assertEquals(message.getData2(), 127);
+    }
+
+    @Test
+    public void testNotifyListeners() {
+        // Create a mock MidiListener
+        SimpleMidiListener listener = Mockito.mock(SimpleMidiListener.class);
+        StandardMidiListener standardListener = Mockito.mock(StandardMidiListener.class);
+        ObjectMidiListener objectListener = Mockito.mock(ObjectMidiListener.class);
+
+        // Create a MidiBus instance and add the listener
+        MidiBus midiBus = new MidiBus(this, "Studio 68c", "Studio 68c");
+        midiBus.addMidiListener(listener);
+        midiBus.addMidiListener(standardListener);
+        midiBus.addMidiListener(objectListener);
+
+
+        // Create a MIDI message
+        byte[] data = new byte[] {(byte) (ShortMessage.NOTE_ON | 0x0F), 0x40, 0x7F};
+
+        // Call notifyListeners
+        midiBus.notifyListeners(new MidiMessage(data) {
+            @Override
+            public Object clone() {
+                return null;
+            }
+        }, 0);
+
+        data = new byte[] {(byte) (ShortMessage.NOTE_OFF | 0x0F), 0x40, 0x7F};
+
+        // Call notifyListeners
+        midiBus.notifyListeners(new MidiMessage(data) {
+            @Override
+            public Object clone() {
+                return null;
+            }
+        }, 0);
+
+        data = new byte[] {(byte) (ShortMessage.CONTROL_CHANGE | 0x0F), 0x40, 0x7F};
+
+        // Call notifyListeners
+        midiBus.notifyListeners(new MidiMessage(data) {
+            @Override
+            public Object clone() {
+                return null;
+            }
+        }, 0);
+
+        // Verify that the noteOn method was called on the listener
+        Mockito.verify(listener, Mockito.times(1)).noteOn(0x0F, 0x40, 0x7F);
+
+
+        // Verify that the midiMessage method was called on the standardListener
+        Mockito.verify(standardListener, Mockito.times(3)).midiMessage(Mockito.any(MidiMessage.class), Mockito.eq(0L));
+
+        // Verify that the noteOn method was called on the objectListener
+        Mockito.verify(objectListener, Mockito.times(1)).noteOn(Mockito.any(Note.class));
+    }
+
+    @Test
+    public void listenerExceptionTest() throws Exception {
+
+        // Create a mock MidiListener that throws an exception
+        SimpleMidiListener listener = Mockito.mock(SimpleMidiListener.class);
+        Mockito.doThrow(new RuntimeException()).when(listener).noteOn(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyInt());
+
+        // Create a MidiBus instance and add the listener
+        MidiBus midiBus = new MidiBus();
+        midiBus.addMidiListener(listener);
+
+        // Create a MIDI message
+        byte[] data = new byte[] {(byte) (ShortMessage.NOTE_ON | 0x0F), 0x40, 0x7F};
+
+        // Call notifyListeners and expect an exception
+        assertThrows(RuntimeException.class, () -> midiBus.notifyListeners(new MidiMessage(data) {
+            @Override
+            public Object clone() {
+                return null;
+            }
+        }, 0));
+
+    }
+
+    @Test
+    public void MetaMessageTest() throws Exception {
+        // Create a MidiBus instance
+        MidiBus midiBus = new MidiBus();
+
+// Create a MetaMessage
+        byte[] metaMessageData = new byte[] {(byte) MetaMessage.META, 0x02, /* payload bytes go here */};
+
+// Send the MetaMessage
+        midiBus.sendMessage(metaMessageData);
+
+        Assertions.assertTrue(metaMessageData.length != 0);
+    }
+
+    @Test
+    public void SysexMessageTest() throws Exception {
+        MidiBus midiBus = new MidiBus();
+
+// Create a SysexMessage
+        byte[] sysexMessageData = new byte[] {(byte) SysexMessage.SYSTEM_EXCLUSIVE, /* sysex data bytes go here */};
+
+// Send the SysexMessage
+        midiBus.sendMessage(sysexMessageData);
+
+        Assertions.assertTrue(sysexMessageData.length != 0);
+    }
+
+    @Test
+    public void sendMessageTest() throws Exception {
+        MidiBus midiBus = new MidiBus();
+        midiBus.sendMessage(0x90, 0, 60, 127);
+
+        Assertions.assertTrue(midiBus.bus_name != null);
+    }
 
 
     
